@@ -1,6 +1,13 @@
-import React from "react";
-import ReactDOM from 'react-dom';
-
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('root')  ); // Mount the Application onto the root div
+//use createRoot instead of ReactDOM.render
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+
+
+
+// Mount the Application onto the root div
+
