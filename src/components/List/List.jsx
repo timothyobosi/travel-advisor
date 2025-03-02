@@ -2,9 +2,25 @@ import React, {useState} from 'react';
 
 import { CircularProgress, Grid, Typography, InputLabel, MenuItem, FormControl, Select  } from '@mui/material';
 
+import PlaceDetails from '../PlaceDetails/PlaceDetails';
+
 import useStyles from './styles';
 
 const List = () => {
+
+    //rendering restaurants
+    const places = [
+        {name: 'Cool Place'},
+        {name: 'Best Beer'},
+        {name: 'Best Stake'},
+        {name: 'Cool Place'},
+        {name: 'Best Beer'},
+        {name: 'Best Stake'},
+        {name: 'Cool Place'},
+        {name: 'Best Beer'},
+        {name: 'Best Stake'},
+    ];
+
 
     const classes = useStyles();
     //use state
@@ -30,7 +46,17 @@ const List = () => {
                     <MenuItem value={4}>Above 4.0</MenuItem>
                     <MenuItem value={4.5}>Above 4.5</MenuItem>
                 </Select>
-            </FormControl>              
+            </FormControl> 
+            {/* Loop rendered Restaurants */}             
+            <Grid container spacing={3} className={classes.List}>
+                {places?.map((place, i)=>(
+                    <Grid item key ={i} xs={12}>
+                        <PlaceDetails place={place}/>
+
+                    </Grid>
+                ))}
+
+            </Grid>
         </div>
 
     );
