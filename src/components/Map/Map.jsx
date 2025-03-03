@@ -6,12 +6,12 @@ import Rating from '@mui/material/Rating';
 
 import useStyles from './styles';
 
-const Map = () => {
+const Map = ({setCoordinates, setBounds, coordinates}) => {
 
     const classes = useStyles();
     const isMobile = useMediaQuery('(min-width:600px)');// this mobile variable is going to be set to false if the width is large than 600 pixels
 
-    const coordinates = {lat:0, lng:0};
+
 
     return(
         <div className={classes.mapContainer}>
@@ -22,7 +22,11 @@ const Map = () => {
             defaultZoom={14}
             margin={[50, 50, 50, 50]}
             options={''}
-            onChange={''}
+            onChange={(e) =>{
+                console.log(e);
+                setCoordinates({lat:e.center.lat, lng:e.center.lng});
+                setBounds({ne: e.marginBounds.ne, sw: e.marginBounds.sw})
+            }}
             onChildClick={''}//Use on the restaurant on the map
             >
                 
