@@ -17,26 +17,34 @@ const App = () => {
     const [places, setPlaces] = useState([]);
     
 
-    const [coordinates, setCoordinates] = useState({});
+    const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
     const [bounds, setBounds] = useState(null);
 
-    useEffect(()=>{
-        navigator.geolocation.getCurrentPosition(({coords:{latitude, longitude}})=>{
-            setCoordinates({lat:latitude, lng: longitude});
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(
+            ({ coords: { latitude, longitude } }) => {
+                setCoordinates({ lat: latitude, lng: longitude });
+            },
+            (error) => {
+                console.error("Geolocation failed:", error);
+                // Fallback to a neutral world view (e.g., Atlantic Ocean or a city like San Francisco)
+                setCoordinates({ lat: 0, lng: 0 }); // Or use { lat: 37.7749, lng: -122.4194 } for San Francisco
+            }
+        );
+    }, []); // Empty dependency array ensures this runs only once on mount
 
-        })
-    })
-
-    useEffect(() =>{
-        console.log(coordinates, bounds);
-        getPlacesData()
-             .then((data) =>{
-                console.log(data);
-
-                setPlaces(data);
-             })
-
-    }, [coordinates, bounds]);
+    useEffect(() => {
+        console.log("Current coordinates:", coordinates);
+        console.log("Current bounds:", bounds);
+        if (coordinates.lat && coordinates.lng) { // Ensure coordinates are valid before fetching
+            getPlacesData(bounds)
+                .then((data) => {
+                    console.log(data);
+                    setPlaces(data);
+                })
+                .catch((error) => console.error("Error fetching places:", error));
+        }
+    }, [coordinates, bounds]); // Fetch places when coordinates or bounds change
 
 
     return (

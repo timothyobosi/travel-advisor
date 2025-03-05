@@ -19,7 +19,9 @@ const Map = ({setCoordinates, setBounds, coordinates}) => {
             bootstrapURLKeys={{key:'AIzaSyACmQQQi1aaZJlsOiJFgRaaSyd441LVWgQ'}}
             defaultCenter={coordinates}
             center={coordinates}
-            defaultZoom={14}
+            defaultZoom={2} // Start with world view
+            minZoom={1}    // Allow zooming out to world view
+            maxZoom={20}
             margin={[50, 50, 50, 50]}
             options={''}
             onChange={(e) =>{
