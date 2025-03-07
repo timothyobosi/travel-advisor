@@ -16,13 +16,34 @@ const options = {
     }
   };
 
-export const getPlacesData = async () => {
-    try {
-        const {data:{data}} = await axios.get(URL, options);
+  let cachedData = null; // cache for API repsonse
 
-        return data;        
+export const getPlacesData = async (bounds) => {
+    try {
+        // Use cached data if available and bounds haven’t changed
+        if (cachedData && JSON.stringify(bounds) === JSON.stringify(cachedData.bounds)) {
+          return cachedData.data;
+      }
+
+      // Update options with dynamic bounds if provided
+      if (bounds) {
+          options.params.bl_latitude = bounds.sw.lat;
+          options.params.tr_latitude = bounds.ne.lat;
+          options.params.bl_longitude = bounds.sw.lng;
+          options.params.tr_longitude = bounds.ne.lng;
+      }
+
+      // Changed: Limit the number of results for faster response
+      options.params.limit = 10; // Fetch only 10 places initially
+
+      const { data: { data } } = await axios.get(URL, options);
+
+      // Cache the response with bounds
+      cachedData = { data, bounds };
+      return data;       
     } catch (error) {
         console.log(error)
+        return []; // Return empty array or cached data on error
         
     }
 }
